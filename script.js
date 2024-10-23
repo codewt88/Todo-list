@@ -1,162 +1,235 @@
-document.querySelector(".add-btn").addEventListener("click", function () {
-  const todoInput = document.querySelector(".todo-input");
-  const task = todoInput.value.trim();
+let currentMainTask = null;
+// Variable to store the current main task
 
-  if (task !== "") {
-    const todoList = document.querySelector(".todo-list");
-    const li = document.createElement("li");
-    li.classList.add("task-item");
+document.getElementById('add-main-task').addEventListener('click', function() {
+    const mainTaskText = document.getElementById('main-task').value.trim();
+    // Get the text from the main task input and remove whitespace
 
-    const taskHeader = document.createElement("div");
-    taskHeader.className = "task-header";
+    if (mainTaskText === '') {
+        // Check if the input is empty and show an alert if it is
+        alert('Please enter the task content.');
+        return;
+    }
 
-    const taskCheckbox = document.createElement("input");
-    taskCheckbox.type = "checkbox";
-    taskCheckbox.className = "task-checkbox";
-    taskCheckbox.style.marginRight = "10px";
-    taskHeader.appendChild(taskCheckbox);
+    if (mainTaskText !== '') {
+        const taskContainer = createTaskElement(mainTaskText, false, []);
+        document.getElementById('task-list').appendChild(taskContainer);
+        // Add the task to the task list
 
-    const taskTitle = document.createElement("span");
-    taskTitle.textContent = task;
-    taskHeader.appendChild(taskTitle);
-
-    const deleteTaskBtn = document.createElement("button");
-    deleteTaskBtn.className = "delete-btn";
-    deleteTaskBtn.textContent = "Delete";
-    taskHeader.appendChild(deleteTaskBtn);
-
-    li.appendChild(taskHeader);
-
-    const subtaskInput = document.createElement("textarea");
-    subtaskInput.className = "subtask-input";
-    subtaskInput.placeholder = "Add a subtask...";
-    const addSubtaskBtn = document.createElement("button");
-    addSubtaskBtn.className = "add-subtask-btn";
-    addSubtaskBtn.textContent = "Add Subtask";
-
-    const subtaskContainer = document.createElement("div");
-    subtaskContainer.style.display = "flex";
-    subtaskContainer.style.alignItems = "flex-start";
-    subtaskContainer.appendChild(subtaskInput);
-    subtaskContainer.appendChild(addSubtaskBtn);
-    li.appendChild(subtaskContainer);
-
-    const subtaskList = document.createElement("ul");
-    subtaskList.className = "subtask-list";
-    li.appendChild(subtaskList);
-
-    todoList.appendChild(li);
-    todoInput.value = "";
-
-    deleteTaskBtn.addEventListener("click", function () {
-      todoList.removeChild(li);
-    });
-
-    addSubtaskBtn.addEventListener("click", function () {
-      const subtask = subtaskInput.value.trim();
-      if (subtask !== "") {
-        const subtaskItem = document.createElement("li");
-        subtaskItem.className = "subtask-item";
-
-        const subtaskLabel = document.createElement("label");
-        const subtaskCheckbox = document.createElement("input");
-        subtaskCheckbox.type = "checkbox";
-        subtaskCheckbox.addEventListener("change", function () {
-          if (subtaskCheckbox.checked) {
-            subtaskItem.classList.add("completed");
-          } else {
-            subtaskItem.classList.remove("completed");
-          }
-        });
-
-        subtaskLabel.appendChild(subtaskCheckbox);
-        subtaskLabel.appendChild(document.createTextNode(subtask));
-        subtaskItem.appendChild(subtaskLabel);
-
-        const deleteSubtaskBtn = document.createElement("button");
-        deleteSubtaskBtn.className = "delete-btn";
-        deleteSubtaskBtn.textContent = "Delete";
-        deleteSubtaskBtn.addEventListener("click", function () {
-          subtaskList.removeChild(subtaskItem);
-        });
-
-        subtaskItem.appendChild(deleteSubtaskBtn);
-        subtaskList.appendChild(subtaskItem);
-        subtaskInput.value = "";
-      }
-    });
-
-    taskCheckbox.addEventListener("change", function () {
-      if (taskCheckbox.checked) {
-        taskHeader.classList.add("completed");
-        const subtasks = li.querySelectorAll(
-          '.subtask-item input[type="checkbox"]'
-        );
-        subtasks.forEach((subtaskCheckbox) => {
-          subtaskCheckbox.checked = true;
-          subtaskCheckbox.parentElement.parentElement.classList.add(
-            "completed"
-          );
-        });
-      } else {
-        taskHeader.classList.remove("completed");
-        const subtasks = li.querySelectorAll(
-          '.subtask-item input[type="checkbox"]'
-        );
-        subtasks.forEach((subtaskCheckbox) => {
-          subtaskCheckbox.checked = false;
-          subtaskCheckbox.parentElement.parentElement.classList.remove(
-            "completed"
-          );
-        });
-      }
-    });
-  }
+        document.getElementById('main-task').value = '';
+        // Clear the main task input field
+        saveTasks();
+        // Save tasks after adding a new main task
+    }
 });
 
-document.getElementById("show-all").addEventListener("click", function () {
-  filterTasks("all");
+document.getElementById('all-tasks').addEventListener('click', function() {
+    filterTasks('all');
+    // Show all tasks
 });
 
-document
-  .getElementById("show-completed")
-  .addEventListener("click", function () {
-    filterTasks("completed");
-  });
+document.getElementById('completed-tasks').addEventListener('click', function() {
+    filterTasks('completed');
+    // Show only completed tasks
+});
 
-document
-  .getElementById("show-incomplete")
-  .addEventListener("click", function () {
-    filterTasks("incomplete");
-  });
+document.getElementById('incomplete-tasks').addEventListener('click', function() {
+    filterTasks('incomplete');
+    // Show only incomplete tasks
+});
 
 function filterTasks(filter) {
-  const tasks = document.querySelectorAll(".task-item");
-  tasks.forEach((task) => {
-    const subtasks = task.querySelectorAll(
-      '.subtask-item input[type="checkbox"]'
-    );
-    const allCompleted = Array.from(subtasks).every(
-      (checkbox) => checkbox.checked
-    );
-    const anyIncomplete = Array.from(subtasks).some(
-      (checkbox) => !checkbox.checked
-    );
-
-    if (filter === "all") {
-      task.style.display = "";
-    } else if (
-      filter === "completed" &&
-      task.querySelector(".task-checkbox").checked
-    ) {
-      task.style.display = "";
-    } else if (
-      filter === "incomplete" &&
-      !task.querySelector(".task-checkbox").checked
-    ) {
-      task.style.display = "";
-    } else {
-      task.style.display = "none";
-    }
-  });
+    const tasks = document.querySelectorAll('.task-item');
+    tasks.forEach(task => {
+        switch (filter) {
+            case 'all':
+                task.style.display = 'block';
+                break;
+            case 'completed':
+                task.style.display = task.dataset.completed === 'true' ? 'block' : 'none';
+                break;
+            case 'incomplete':
+                task.style.display = task.dataset.completed === 'false' ? 'block' : 'none';
+                break;
+        }
+    });
 }
+
+function toggleTaskCompleted(taskLabel, isCompleted) {
+    // Function to toggle the style of completed/incomplete tasks
+    if (isCompleted) {
+        taskLabel.style.textDecoration = 'line-through';
+        taskLabel.style.color = 'gray';
+    } else {
+        taskLabel.style.textDecoration = 'none';
+        taskLabel.style.color = 'black';
+    }
+}
+
+// Function to save tasks to localStorage
+function saveTasks() {
+    const tasks = [];
+    document.querySelectorAll('.task-item').forEach(taskContainer => {
+        const mainTaskText = taskContainer.querySelector('.task-text').textContent;
+        const isCompleted = taskContainer.dataset.completed === 'true';
+        const subTasks = [];
+
+        taskContainer.querySelectorAll('.sub-task').forEach(subTaskContainer => {
+            subTasks.push({
+                text: subTaskContainer.querySelector('.task-text').textContent,
+                isCompleted: subTaskContainer.querySelector('.task-checkbox').checked
+            });
+        });
+
+        tasks.push({
+            mainTaskText,
+            isCompleted,
+            subTasks
+        });
+    });
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+
+// Function to load tasks from localStorage
+function loadTasks() {
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    tasks.forEach(task => {
+        const taskContainer = createTaskElement(task.mainTaskText, task.isCompleted, task.subTasks);
+        document.getElementById('task-list').appendChild(taskContainer);
+    });
+}
+
+// Function to create a task element with all its components
+function createTaskElement(mainTaskText, isCompleted, subTasks) {
+    const taskContainer = document.createElement('div');
+    taskContainer.classList.add('task-item');
+    taskContainer.dataset.completed = isCompleted;
+
+    // Main Task
+    const mainTask = document.createElement('div');
+    mainTask.classList.add('main-task');
+
+    const mainTaskCheckbox = document.createElement('input');
+    mainTaskCheckbox.type = 'checkbox';
+    mainTaskCheckbox.classList.add('task-checkbox');
+    mainTaskCheckbox.checked = isCompleted;
+
+    const mainTaskLabel = document.createElement('span');
+    mainTaskLabel.textContent = mainTaskText;
+    mainTaskLabel.classList.add('task-text');
+    toggleTaskCompleted(mainTaskLabel, isCompleted);
+
+    mainTask.appendChild(mainTaskCheckbox);
+    mainTask.appendChild(mainTaskLabel);
+
+    // Sub Task Container
+    const subTaskContainer = document.createElement('div');
+    subTaskContainer.classList.add('sub-task-container');
+
+    subTasks.forEach(subTask => {
+        const subTaskElement = createSubTaskElement(subTask.text, subTask.isCompleted);
+        subTaskContainer.appendChild(subTaskElement);
+    });
+
+    // Sub Task Input
+    const subTaskInput = document.createElement('textarea');
+    subTaskInput.rows = 2;
+    subTaskInput.placeholder = 'Sub task...';
+    subTaskInput.classList.add('resizable-textbox');
+
+    const addSubTaskButton = document.createElement('button');
+    addSubTaskButton.textContent = 'Add Sub Task';
+    addSubTaskButton.classList.add('add-sub-task');
+
+    addSubTaskButton.addEventListener('click', function() {
+        const subTaskText = subTaskInput.value.trim();
+        if (subTaskText === '') {
+            alert('Please enter the sub-task content.');
+            return;
+        }
+
+        const subTaskElement = createSubTaskElement(subTaskText, false);
+        subTaskContainer.appendChild(subTaskElement);
+        subTaskInput.value = '';
+        saveTasks();
+    });
+
+    const deleteButton = document.createElement('button');
+    deleteButton.classList.add('delete-task');
+    deleteButton.textContent = 'Delete Task';
+
+    deleteButton.addEventListener('click', function() {
+        if (confirm('Are you sure you want to delete this task?')) {
+            taskContainer.remove();
+            saveTasks();
+        }
+    });
+
+    mainTaskCheckbox.addEventListener('change', function() {
+        toggleTaskCompleted(mainTaskLabel, mainTaskCheckbox.checked);
+        taskContainer.dataset.completed = mainTaskCheckbox.checked ? 'true' : 'false';
+
+        const subTasks = subTaskContainer.querySelectorAll('.sub-task .task-checkbox');
+        subTasks.forEach(subTaskCheckbox => {
+            subTaskCheckbox.checked = mainTaskCheckbox.checked;
+            toggleTaskCompleted(subTaskCheckbox.nextElementSibling, subTaskCheckbox.checked);
+        });
+        saveTasks();
+    });
+
+    taskContainer.appendChild(mainTask);
+    taskContainer.appendChild(subTaskInput);
+    taskContainer.appendChild(addSubTaskButton);
+    taskContainer.appendChild(subTaskContainer);
+    taskContainer.appendChild(deleteButton);
+
+    return taskContainer;
+}
+
+// Function to create a sub-task element
+function createSubTaskElement(subTaskText, isCompleted) {
+    const subTask = document.createElement('div');
+    subTask.classList.add('sub-task');
+
+    const subTaskCheckbox = document.createElement('input');
+    subTaskCheckbox.type = 'checkbox';
+    subTaskCheckbox.classList.add('task-checkbox');
+    subTaskCheckbox.checked = isCompleted;
+
+    const subTaskLabel = document.createElement('span');
+    subTaskLabel.textContent = subTaskText;
+    subTaskLabel.classList.add('task-text');
+    toggleTaskCompleted(subTaskLabel, isCompleted);
+
+    const deleteSubTaskButton = document.createElement('button');
+    deleteSubTaskButton.classList.add('delete-sub-task');
+    deleteSubTaskButton.innerHTML = '<img src="delete-icon.png" alt="Delete">';
+
+    deleteSubTaskButton.addEventListener('click', function() {
+        if (confirm('Are you sure you want to delete this sub-task?')) {
+            subTask.remove();
+            saveTasks();
+        }
+    });
+
+    subTaskCheckbox.addEventListener('change', function() {
+        toggleTaskCompleted(subTaskLabel, subTaskCheckbox.checked);
+        saveTasks();
+    });
+
+    subTask.appendChild(subTaskCheckbox);
+    subTask.appendChild(subTaskLabel);
+    subTask.appendChild(deleteSubTaskButton);
+
+    return subTask;
+}
+
+// Call loadTasks when the page loads
+window.addEventListener('load', loadTasks);
+
+// Example of saving tasks after deleting a main task
+document.addEventListener('click', function(event) {
+    if (event.target.classList.contains('delete-task')) {
+        saveTasks();
+    }
+});

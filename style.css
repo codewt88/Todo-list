@@ -1,180 +1,276 @@
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f0f0f0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
+    font-family: Arial, sans-serif;
+    /* Set the font family to Arial, using sans-serif as a fallback */
+    
+    background-color: #f4f4f4;
+    /* Light grey background color for the entire page */
+    
+    margin: 0;
+    padding: 0;
+    /* Remove default margin and padding from the body */
 }
 
 .container {
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
+    display: flex;
+    /* Use flexbox layout to align the menu and task sections side by side */
+    
+    gap: 20px;
+    /* Set a 20px gap between the menu and task sections */
+    
+    max-width: 1200px;
+    /* Limit the maximum width of the container to 1200px */
+    
+    margin: 20px auto;
+    /* Center the container horizontally with auto margin and add a 20px margin on top */
+    
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* Add a soft shadow around the container for a subtle 3D effect */
 }
 
 .menu {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 200px;
+    width: 25%;
+    /* Set the width of the menu section to 25% of the container */
+    
+    background-color: #fff;
+    /* Set the background color of the menu to white */
+    
+    padding: 20px;
+    /* Add 20px padding inside the menu */
+    
+    border-right: 1px solid #ddd;
+    /* Add a light grey border to the right side of the menu to separate it from the task section */
+}
+
+.menu h3 {
+    margin-top: 0;
+    /* Remove the default margin from the top of the category heading */
+}
+
+.menu ul {
+    list-style-type: none;
+    /* Remove default bullet points from the unordered list */
+    
+    padding: 0;
+    /* Remove default padding from the list */
+}
+
+.menu ul li {
+    margin-bottom: 10px;
+    /* Add 10px space between each list item */
 }
 
 .menu button {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+    width: 100%;
+    /* Make the buttons take the full width of the menu */
+    
+    padding: 10px;
+    /* Add padding inside the button for a larger click area */
+    
+    border: none;
+    /* Remove default button borders */
+    
+    background-color: #007bff;
+    /* Set the button's background color to blue (#007bff) */
+    
+    color: #fff;
+    /* Set the text color to white */
+    
+    cursor: pointer;
+    /* Change the cursor to a pointer when hovering over the button */
+    
+    border-radius: 5px;
+    /* Round the corners of the button by 5px */
 }
 
 .menu button:hover {
-  background-color: #0056b3;
+    background-color: #0056b3;
+    /* Change the button's background color to a darker blue when hovered over */
 }
 
-.todo-container {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 320px;
+.tasks {
+    width: 75%;
+    /* Set the width of the tasks section to 75% of the container */
+    
+    background-color: #fff;
+    /* Set the background color of the task section to white */
+    
+    padding: 20px;
+    /* Add 20px padding inside the task section */
 }
 
-h2 {
-  text-align: center;
+.tasks h2 {
+    margin-top: 0;
+    /* Remove the default margin from the top of the task heading */
 }
 
-.todo-input {
-  width: calc(100% - 22px);
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-bottom: 10px;
-  resize: vertical;
-  height: 40px;
+.resizable-textbox {
+    width: calc(100% - 20px);
+    /* Set the width of the text box to 100% minus 20px to ensure proper padding alignment */
+    
+    padding: 10px;
+    /* Add padding inside the text box */
+    
+    margin-bottom: 10px;
+    /* Add 10px margin below the text box to separate it from other elements */
+    
+    border: 1px solid #ddd;
+    /* Add a light grey border around the text box */
+    
+    border-radius: 5px;
+    /* Round the corners of the text box by 5px */
+    
+    resize: vertical;
+    /* Allow the user to resize the text box vertically */
 }
 
-.add-btn {
-  width: 100%;
-  padding: 10px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-bottom: 15px;
+#add-main-task {
+    padding: 10px 20px;
+    /* Add padding to the button (10px top and bottom, 20px left and right) */
+    
+    background-color: #17a2b8;
+    /* Set the button's background color to teal */
+    
+    color: #fff;
+    /* Set the text color to white */
+    
+    border: none;
+    /* Remove the button's default border */
+    
+    cursor: pointer;
+    /* Change the cursor to a pointer when hovering over the button */
+    
+    border-radius: 5px;
+    /* Round the corners of the button by 5px */
 }
 
-.add-btn:hover {
-  background-color: #0056b3;
+#add-main-task:hover {
+    background-color: #138496;
+    /* Change the button's background color to a darker teal when hovered over */
 }
 
-ul {
-  list-style: none;
-  padding: 0;
-  margin-top: 20px;
+#task-list {
+    margin-top: 20px;
+    /* Add 20px margin on top of the task list */
 }
 
-li {
-  background-color: #f9f9f9;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-bottom: 10px;
-  display: flex;
-  flex-direction: column;
+.task-item {
+    padding: 10px;
+    /* Add 10px padding inside each task item */
+    
+    margin-bottom: 10px;
+    /* Add 10px margin below each task item */
+    
+    border: 1px solid #ddd;
+    /* Add a light grey border around each task item */
+    
+    border-radius: 5px;
+    /* Round the corners of each task item by 5px */
+    
+    background-color: #f9f9f9;
+    /* Set the background color of each task item to a very light grey */
 }
 
-.task-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
+.main-task, .sub-task {
+    display: flex;
+    /* Use flexbox layout to align elements inside tasks horizontally */
+    
+    margin-bottom: 10px;
+    /* Add 10px margin below each task */
+    
+    align-items: center;
+    /* Vertically center-align the items inside the task */
 }
 
 .task-checkbox {
-  margin-right: 10px;
+    margin-right: 10px;
+    /* Add 10px space to the right of the checkbox */
 }
 
-.task-header span {
-  flex-grow: 1;
-  text-align: left;
+.task-text {
+    font-size: 16px;
+    /* Set the font size for task text to 16px */
 }
 
-.task-header.completed span {
-  text-decoration: line-through;
-  color: #6c757d;
+.delete-task, .delete-sub-task {
+    background: none;
+    /* Remove default background from the delete buttons */
+    
+    border: none;
+    /* Remove default border from the delete buttons */
+    
+    cursor: pointer;
+    /* Change the cursor to a pointer when hovering over the delete buttons */
+    
+    margin-left: 10px;
+    /* Add 10px margin to the left of the delete buttons */
 }
 
-.subtask-input {
-  width: calc(100% - 120px);
-  padding: 5px;
-  margin-right: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  resize: vertical;
-  height: 40px;
+.delete-task {
+    padding: 5px 10px;
+    /* Add padding inside the delete button (5px top and bottom, 10px left and right) */
+    
+    background-color: #dc3545;
+    /* Set the delete button's background color to red */
+    
+    color: #fff;
+    /* Set the text color to white */
+    
+    border-radius: 5px;
+    /* Round the corners of the delete button by 5px */
+    
+    transition: background-color 0.3s ease;
+    /* Add a transition effect for background color changes */
 }
 
-.add-subtask-btn {
-  padding: 5px;
-  background-color: #28a745;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  width: 100px;
-  margin-left: 10px;
-  align-self: flex-start;
+.delete-task:hover {
+    background-color: #c82333;
+    /* Change the delete button's background color to a darker red when hovered over */
 }
 
-.add-subtask-btn:hover {
-  background-color: #218838;
+.delete-task img, .delete-sub-task img {
+    width: 16px;
+    height: 16px;
+    /* Set the size of the delete icons to 16x16 pixels */
 }
 
-.delete-btn {
-  background-color: #dc3545;
-  color: #fff;
-  border: none;
-  padding: 5px;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 10px;
-  margin-bottom: 10px;
+.sub-task-container {
+    margin-left: 20px;
+    /* Add 20px indentation from the left for sub-tasks */
+    
+    margin-top: 10px;
+    /* Add 10px margin on top of the sub-task container */
 }
 
-.delete-btn:hover {
-  background-color: #c82333;
+.add-sub-task {
+    padding: 5px 10px;
+    /* Add padding inside the "Add Sub Task" button (5px top and bottom, 10px left and right) */
+    
+    background-color: #ffc107;
+    /* Set the background color to yellow */
+    
+    color: #fff;
+    /* Set the text color to white */
+    
+    border: none;
+    /* Remove the button's default border */
+    
+    cursor: pointer;
+    /* Change the cursor to a pointer when hovering over the button */
+    
+    border-radius: 5px;
+    /* Round the corners of the button by 5px */
+    
+    margin-top: 10px;
+    /* Add 10px margin on top of the button */
 }
 
-.subtask-list {
-  list-style: none;
-  padding: 0;
-  margin-top: 10px;
+.add-sub-task:hover {
+    background-color: #e0a800;
+    /* Change the button's background color to a darker yellow when hovered over */
 }
 
-.subtask-item {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 5px;
-  flex-wrap: wrap;
-}
-
-.subtask-item input[type="checkbox"] {
-  margin-right: 10px;
-}
-
-.subtask-item.completed label {
-  text-decoration: line-through;
-  color: #6c757d;
-}
-
-.subtask-item label {
-  display: flex;
-  align-items: center;
-  word-break: break-word;
+.sub-task {
+    margin-top: 3px;
+    margin-bottom: 3px;
+    /* Add a small amount of vertical spacing (3px) between sub-task items */
 }
